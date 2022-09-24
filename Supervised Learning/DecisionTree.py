@@ -27,10 +27,13 @@ class DTLearner(object):
 
         # slap on 1s column so linear regression finds a constant term
         ndata = np.append(data_x, data_y, axis=1)
+        self.iter=0
         self.tree = self.build_tree(ndata)
+        return self.iter
 
         # build and save the model
     def build_tree(self, data):
+        self.iter+=1
         k= np.all(data[:, -1] == data[0, -1])
         if data.shape[0] <= self.leafsize:
             rvalue= np.mean(data[:,-1])
@@ -57,7 +60,12 @@ class DTLearner(object):
             leftdata=data[data[:,index]<=splitval]
             rightdata=data[data[:,index]>splitval]
             if ((leftdata.shape[0]==data.shape[0]) or (rightdata.shape[0]==data.shape[0])):
-                return np.array([[-1, np.mode(data[:,-1]), -1, -1]])
+                rvalue= np.mean(data[:,-1])
+                if rvalue >=0.5:
+                    rvalue=1
+                else:
+                    rvalue=0
+                return np.array([[-1, rvalue, -1, -1]])
             lefttree = self.build_tree(leftdata)
             righttree = self.build_tree(rightdata)
             root = [index, splitval, 1, lefttree.shape[0] + 1]
