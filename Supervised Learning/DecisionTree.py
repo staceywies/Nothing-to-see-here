@@ -37,10 +37,10 @@ class DTLearner(object):
         k= np.all(data[:, -1] == data[0, -1])
         if data.shape[0] <= self.leafsize:
             rvalue= np.mean(data[:,-1])
-            if rvalue >=0.5:
+            if rvalue >=0:
                 rvalue=1
             else:
-                rvalue=0
+                rvalue=-1
             append = np.array([[-1, rvalue, -1, -1]])
             return append
         if k:
@@ -61,10 +61,10 @@ class DTLearner(object):
             rightdata=data[data[:,index]>splitval]
             if ((leftdata.shape[0]==data.shape[0]) or (rightdata.shape[0]==data.shape[0])):
                 rvalue= np.mean(data[:,-1])
-                if rvalue >=0.5:
+                if rvalue >=0:
                     rvalue=1
                 else:
-                    rvalue=0
+                    rvalue=-1
                 return np.array([[-1, rvalue, -1, -1]])
             lefttree = self.build_tree(leftdata)
             righttree = self.build_tree(rightdata)
