@@ -56,9 +56,9 @@ class DTLearner(object):
                 if abs(corsingle)>cormax:
                     cormax=corsingle
                     index=i
-            splitval = np.median(data[:,index])
-            leftdata=data[data[:,index]<=splitval]
-            rightdata=data[data[:,index]>splitval]
+            splitval = np.mean(data[:,index])
+            leftdata=data[data[:,index]<splitval]
+            rightdata=data[data[:,index]>=splitval]
             if ((leftdata.shape[0]==data.shape[0]) or (rightdata.shape[0]==data.shape[0])):
                 rvalue= np.mean(data[:,-1])
                 if rvalue >=0:
