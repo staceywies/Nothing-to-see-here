@@ -1185,7 +1185,7 @@ class staceyQLearning(MDP):
     """
 
     def __init__(self, transitions, reward, discount, n_iter=10000,
-                 skip_check=False):
+                 skip_check=False, eps=0.1):
         # Initialise a Q-learning MDP.
 
         # The following check won't be done in MDP()'s initialisation, so let's
@@ -1205,6 +1205,7 @@ class staceyQLearning(MDP):
         self.R = reward
 
         self.discount = discount
+        self.eps=eps
 
         # Initialisations
         self.Q = _np.zeros((self.S, self.A))
@@ -1227,9 +1228,8 @@ class staceyQLearning(MDP):
 
             # Action choice : greedy with increasing probability
             # probability 1-(1/log(n+2)) can be changed
-            pn = _np.random.random()
-            if pn < (1 - (1 / _math.log(n + 2))):
-                # optimal_action = self.Q[s, :].max()
+            eps=self.eps
+            if _np.random.random()<eps:
                 a = self.Q[s, :].argmax()
             else:
                 a = _np.random.randint(0, self.A)
@@ -1272,7 +1272,7 @@ class staceyQLearning(MDP):
             self.policy = self.Q.argmax(axis=1)
 
         self._endRun()
-        self.time=self.time-time.time()
+        print('here')
         #print(self.time)
 
 
